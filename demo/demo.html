@@ -4,64 +4,159 @@
     <meta charset="utf-8">
     <title>ECharts</title>
     <!-- 引入 echarts.js -->
-    <script src="./node_modules/_echarts@4.9.0@echarts/dist/echarts.min.js"></script>
+    <script src="./node_modules/_echarts@4.9.0@echarts/dist/echarts.js"></script>
+    <!-- -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+    
 </head>
 <body>
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="main" style="width: 600px;height:400px;"></div>
-    <script
-    src="https://code.jquery.com/jquery-3.5.1.min.js"
-    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-    crossorigin="anonymous"></script>
+    <div id="main" style="width: 100%;height:500px;"></div>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
-        // 指定图表的配置项和数据
-        var myChart = echarts.init(document.getElementById('main'));
-        // 显示标题，图例和空的坐标轴
-        myChart.setOption({
-            title: {
-                text: '异步数据加载示例'
-            },
-            tooltip: {},
-            legend: {
-                data:['销量']
-            },
-            xAxis: {
-                data: []
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: []
-            }]
-        });
 
-        // 异步加载数据
-        $.get('http://localhost:8000/data.json').done(function (data) {
-            // 填入数据
-            console.log(data)
-            console.log(typeof(data))
-            console.log(data.data)
-            console.log(typeof(data.data))
-            console.log(data.data[0].categories)
-            console.log(data.data[0].data)
-            myChart.setOption({
-                xAxis: {
-                    data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-                    //data: data.categories
+
+
+        $.get('logdata.json', function (data) {
+
+            var sizeValue = '10%';
+            var symbolSize = 2.5;
+            option = {
+                legend: {},
+                tooltip: {},
+                toolbox: {
+                    left: 'center',
+                    feature: {
+                        dataZoom: {}
+                    }
                 },
-                series: [{
-                    // 根据名字对应到相应的系列
-                    name: '销量',
-                    data: [5, 20, 36, 10, 10, 20]
-                    //data: data.data
-                }]
-            });
+                grid: [
+                    {right: sizeValue, bottom: sizeValue},
+
+                ],
+                xAxis: [
+                    {type: 'time', gridIndex: 0, name: 'Date', axisLabel: {rotate: 90, interval: 0}},
+                ],
+                yAxis: [
+                    {type: 'value', gridIndex: 0, name: 'SetPointTemp/℃'},
+                ],
+                dataset: {
+                    dimensions: [
+                        "Date",
+                        "SetPointTemp",
+                        "ActualTemp",
+                        "tempMotMagT",
+                        "SetPointHumid",
+                        "ActualHumid",
+                        "sysState"
+                    ],
+                    source: data
+                },
+                series: [
+                    {
+                        type: 'line',
+                        symbolSize: symbolSize,
+                        smooth:false,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        encode: {
+                            x: 'Date',
+                            y: 'SetPointTemp',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'line',
+                        symbolSize: symbolSize,
+                        smooth:false,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        markPoint: {
+                                      data: [{
+                                        type: "max",
+                                        type: "min"
+                                      }],
+                                      animation: true
+                                    },
+                        encode: {
+                            x: 'Date',
+                            y: 'ActualTemp',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'scatter',
+                        symbolSize: symbolSize,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        markPoint: {
+                                      data: [{
+                                        type: "max",
+                                        type: "min"
+                                      }],
+                                      animation: true
+                                    },
+                        encode: {
+                            x: 'Date',
+                            y: 'tempMotMagT',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'line',
+                        symbolSize: symbolSize,
+                        smooth:false,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        markPoint: {
+                                      data: [{
+                                        type: "max",
+                                        type: "min"
+                                      }],
+                                      animation: true
+                                    },
+                        encode: {
+                            x: 'Date',
+                            y: 'SetPointHumid',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'line',
+                        symbolSize: symbolSize,
+                        smooth:false,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        markPoint: {
+                                      data: [{
+                                        type: "max",
+                                        type: "min"
+                                      }],
+                                      animation: true
+                                    },
+                        encode: {
+                            x: 'Date',
+                            y: 'ActualHumid',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
         });
 
+
+
+
+
+
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        //myChart.setOption(option);
     </script>
 </body>
 </html>

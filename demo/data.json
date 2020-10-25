@@ -1,11 +1,1 @@
-{
-    "data": [
-        { "categories":"衬衫" , "data":"5" }, 
-        { "categories":"羊毛衫" , "data":"20" }, 
-        { "categories":"雪纺衫" , "data":"36"},
-        { "categories":"裤子" , "data":"10" },
-        { "categories":"高跟鞋" , "data":"10" },
-        { "categories":"袜子" , "data":"20" }
-
-    ]
-}
+{"categories":["aaa","bbb","ccc","ddd","eee","fff"],"data":[111,22,333,54,11,200]}
